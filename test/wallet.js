@@ -566,7 +566,7 @@ describe('Wallet', function() {
     })
 
     function fakeTxHash(i) {
-      return "txtxtxtxtxtxtxtxtxtxtxtxtxtxtxtxtxtxtxtxtxtxtxtxtxtxtxtxtxtxtxtx" + i
+      return "efefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefe" + i
     }
   })
 
