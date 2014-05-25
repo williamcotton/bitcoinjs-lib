@@ -4,6 +4,11 @@ var networks = require('../src/networks')
 var BigInteger = require('bigi')
 var ECKey = require('../src/eckey')
 var Message = require('../src/message')
+var Wallet = require('../src/wallet')
+var crypto = require('../src/crypto')
+
+function b2h(b) { return new Buffer(b).toString('hex') }
+function h2b(h) { return new Buffer(h, 'hex') }
 
 var fixtures = require('./fixtures/message')
 
@@ -80,4 +85,23 @@ describe('Message', function() {
       assert.equal(signature.toString('base64'), 'H6k+dZwJ8oOei3PCSpdj603fDvhlhQ+sqaFNIDvo/bI+Xh6zyIKGzZpyud6YhZ1a5mcrwMVtTWL+VXq/hC5Zj7s=')
     })
   })
+
+  describe('signs and verifies with a wallet', function() {
+
+    it("should get a wallet privKey and work", function() {
+      var seedPhrase = "test";
+      var seed = crypto.sha256(seedPhrase);
+      var wallet = new Wallet(seed, {network: "testnet"});
+      wallet.generateAddress();
+      var address = wallet.addresses[0];
+      var privKey = wallet.getPrivateKeyForAddress(address);
+      var pubKey = address;
+      var sig = Message.sign(privKey, message);
+      var sigHex = b2h(sig);
+      var sigBuf = h2b(sigHex);
+      assert(Message.verify(pubKey, sigBuf, message));
+    });
+
+  });
+
 })
